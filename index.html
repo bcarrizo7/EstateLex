@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vocabulario Inmobiliario Completo - Real Estate Vocabulary</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --bg-1:#0b0f1a;
+      --bg-2:#0e1626;
+      --brand:#7c4dff;         /* violeta neón */
+      --accent:#00e5ff;        /* cian neón   */
+      --brand-soft:#a991ff;    /* violeta claro para mezcla */
+      --accent-soft:#67efff;   /* cian claro  */
+      --text:#e6eefb;
+      --muted:#9fb2d4;
+      --glass:rgba(255,255,255,0.06);
+      --card:#0f1730;
+      --shadow:0 10px 30px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.05);
+      --ring:0 0 0 2px rgba(124,77,255,.25), 0 0 30px rgba(124,77,255,.25);
+      --radius:18px;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',system-ui,Segoe UI,Tahoma,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(124,77,255,.25), transparent 60%),
+        radial-gradient(1000px 700px at 120% 20%, rgba(0,229,255,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      min-height:100vh;
+      padding:24px;
+      overflow-x:hidden;
+    }
+
+    .grid-bg::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        linear-gradient(transparent 23px, rgba(255,255,255,.04) 24px),
+        linear-gradient(90deg, transparent 23px, rgba(255,255,255,.04) 24px);
+      background-size:24px 24px;
+      mask-image:linear-gradient(180deg, transparent, #000 15%, #000 85%, transparent);
+      animation:glide 30s linear infinite;
+      pointer-events:none;
+      z-index:-1;
+    }
+    @keyframes glide{0%{transform:translateY(0)}100%{transform:translateY(24px)}}
+
+    .container{max-width:1200px;margin:0 auto}
+
+    header{margin-bottom:28px;text-align:center;position:relative}
+    h1{
+      font-size:clamp(1.8rem, 2.5vw + 1rem, 3rem);
+      margin:6px 0 8px;
+      letter-spacing:.4px;
+    }
+    .subtitle{color:var(--muted);font-weight:500}
+
+    /* NUEVO: efecto de título con gradiente animado, adaptado a la paleta */
+    .title-gradient{
+        font-weight:800;
+        line-height:1.15;
+        background:linear-gradient(90deg,
+            var(--brand) 0%,
+            var(--brand-soft) 25%,
+            var(--accent-soft) 60%,
+            var(--accent) 100%);
+        background-size:200% auto;
+        -webkit-background-clip:text; background-clip:text;
+        color:transparent;
+        animation:shine 7s linear infinite;
+    }
+    .title-gradient .no-gradient{
+        background:none !important;
+        -webkit-background-clip:initial !important;
+        background-clip:initial !important;
+        -webkit-text-fill-color:var(--text) !important; /* Safari/Chrome */
+        color:var(--text) !important;                  /* Otros navegadores */
+    }
+    @keyframes shine{ to{ background-position:200% center } }
+
+
+    .stats{
+      margin:18px auto 0;
+      width:fit-content;
+      padding:10px 16px;
+      border-radius:999px;
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      color:#cfe2ff;
+      font-size:.95rem;
+    }
+
+    .controls{margin:26px 0 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center}
+
+    .search{
+      display:flex; align-items:center; gap:10px;
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:10px 14px;
+      box-shadow:var(--shadow);
+      min-width:min(92vw, 560px);
+    }
+    .search input{
+      flex:1;border:0;outline:0;background:transparent;color:var(--text);
+      font-size:1rem;letter-spacing:.2px;
+    }
+    .search .key{
+      font-size:.78rem;color:var(--muted);background:rgba(255,255,255,.08);
+      padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.12)
+    }
+
+    .filter-container{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .filter-btn{
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      color:#dfe7ff;
+      border:1px solid rgba(255,255,255,.14);
+      padding:10px 14px;border-radius:14px;cursor:pointer;font-weight:700;font-size:.92rem;
+      letter-spacing:.2px;transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow:var(--shadow);backdrop-filter:blur(8px);
+    }
+    .filter-btn:hover{transform:translateY(-2px);box-shadow:var(--ring)}
+    .filter-btn.active{box-shadow:var(--ring);background:linear-gradient(135deg, rgba(124,77,255,.25), rgba(0,229,255,.25));color:white}
+
+    .categories{display:grid;gap:18px;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));margin:24px 0 60px}
+    .category-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius);
+      padding:18px;box-shadow:var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease;position:relative;overflow:hidden;
+    }
+    .category-card::after{
+      content:"";position:absolute;inset:auto -20% -40% -20%;height:140px;
+      background:radial-gradient(400px 80px at 50% 0%, rgba(124,77,255,.24), transparent 60%);
+      filter:blur(12px);pointer-events:none;transform:translateY(10px);
+    }
+    .category-card:hover{transform:translateY(-4px);box-shadow:0 25px 60px rgba(0,0,0,.45)}
+
+    .category-title{
+      display:flex;align-items:center;gap:10px;
+      border-bottom:1px dashed rgba(255,255,255,.12);
+      padding-bottom:10px;margin-bottom:12px;
+    }
+    .category-title .icon{
+      display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;
+      background:linear-gradient(135deg, rgba(124,77,255,.35), rgba(0,229,255,.25));
+      box-shadow:var(--ring);font-size:1.05rem;
+    }
+    .category-title .text{
+      font-size:1.05rem;letter-spacing:.3px;
+    }
+    .category-title .text.title-gradient{white-space:normal}
+
+    .vocab-item{
+      background:linear-gradient(180deg, rgba(10,16,38,.65), rgba(16,22,46,.65));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:12px;padding:12px;margin:10px 0;
+      transition:transform .15s ease, border-color .2s ease, background .2s ease;
+    }
+    .vocab-item:hover{
+      transform:translateY(-2px);
+      border-color:rgba(124,77,255,.45);
+      background:linear-gradient(180deg, rgba(10,16,38,.8), rgba(16,22,46,.8));
+      box-shadow:0 0 0 1px rgba(124,77,255,.18), 0 12px 22px rgba(0,0,0,.3);
+    }
+
+    .translations{display:grid;gap:8px}
+    .translation-row{display:flex;align-items:center;gap:10px}
+    .lang-label{font-weight:700;min-width:52px;color:#b8c6ff}
+    .translation-text{flex:1;color:#eaf2ff;font-size:.95rem}
+
+    .speak-btn{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      color:#00111a;border:0;border-radius:999px;width:36px;height:36px;cursor:pointer;font-size:16px;
+      transition:transform .12s ease, box-shadow .2s ease, filter .2s ease;
+      display:grid;place-items:center;box-shadow:var(--ring)
+    }
+    .speak-btn:hover{transform:scale(1.06)}
+    .speak-btn:active{transform:scale(.96)}
+    .speak-btn.playing{animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{filter:saturate(100%)}50%{filter:saturate(140%)}}
+
+    @media (max-width:768px){
+      .controls{gap:10px}
+      .search{min-width:100%}
+      .categories{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body class="grid-bg">
+  <div class="container">
+    <header>
+      <!-- Eliminado el badge de “relleno” -->
+      <h1 class="title-gradient"><span class="no-gradient">🏢</span> Vocabulario Inmobiliario Completo</h1>
+      <p class="subtitle">Real Estate Complete Vocabulary • Vocabulário Completo Imobiliário</p>
+      <div class="stats" id="statsDisplay">📚 0 términos técnicos | 0 categorías</div>
+    </header>
+
+    <div class="controls">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 21l-4.3-4.3" stroke="#9fb2d4" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="11" cy="11" r="7" stroke="#9fb2d4" stroke-width="2" fill="none"/>
+        </svg>
+        <input id="searchInput" type="text" placeholder="Buscar término / Search term / Buscar termo…" autocomplete="off"/>
+        <span class="key">⏎</span>
+      </div>
+      <div class="filter-container" id="filterContainer"></div>
+    </div>
+
+    <div class="categories" id="categoriesContainer"></div>
+
+    <!-- Eliminado el footer con chips de “relleno” -->
+  </div>
+
+  <script>
+    // === DATA (con términos técnicos añadidos previamente) ===
+    const vocabulary = {
+      rooms: {
+        icon: "🏠",
+        title: "Habitaciones / Rooms / Cômodos",
+        terms: [
+          { es:"Dormitorio / Recámara", en:"Bedroom", pt:"Quarto" },
+          { es:"Dormitorio principal", en:"Master bedroom", pt:"Suíte principal" },
+          { es:"Sala de estar", en:"Living room", pt:"Sala de estar" },
+          { es:"Comedor", en:"Dining room", pt:"Sala de jantar" },
+          { es:"Cocina", en:"Kitchen", pt:"Cozinha" },
+          { es:"Cocina integral", en:"Fitted kitchen", pt:"Cozinha planejada" },
+          { es:"Baño completo", en:"Full bathroom", pt:"Banheiro completo" },
+          { es:"Medio baño / Tocador", en:"Half bathroom / Powder room", pt:"Lavabo" },
+          { es:"Baño en suite", en:"En-suite bathroom", pt:"Banheiro privativo" },
+          { es:"Vestidor / Closet", en:"Walk-in closet", pt:"Closet" },
+          { es:"Estudio / Oficina", en:"Study / Home office", pt:"Escritório" },
+          { es:"Cuarto de servicio", en:"Maid's room", pt:"Quarto de empregada" },
+          { es:"Despensa", en:"Pantry", pt:"Despensa" },
+          { es:"Lavandería / Cuarto de lavado", en:"Laundry room", pt:"Lavanderia" },
+          { es:"Sótano", en:"Basement", pt:"Porão" },
+          { es:"Ático / Desván", en:"Attic", pt:"Sótão" },
+          { es:"Vestíbulo / Recibidor", en:"Foyer / Entrance hall", pt:"Hall de entrada" },
+          { es:"Pasillo", en:"Hallway / Corridor", pt:"Corredor" },
+          { es:"Balcón", en:"Balcony", pt:"Varanda" },
+          { es:"Terraza", en:"Terrace", pt:"Terraço" },
+          { es:"Sala multiuso modular", en:"Modular flex room", pt:"Sala flex modular" },
+          { es:"Habitación insonorizada", en:"Soundproof room", pt:"Sala insonorizada" },
+          { es:"Cuarto de servidores", en:"Server room", pt:"Sala de servidores" },
+          { es:"Cuarto de instalaciones", en:"MEP room", pt:"Sala MEP" },
+          { es:"Cuarto de residuos", en:"Waste management room", pt:"Sala de resíduos" }
+        ]
+      },
+      features: {
+        icon: "⚙️",
+        title: "Características / Features / Características",
+        terms: [
+          { es:"Metros cuadrados", en:"Square meters", pt:"Metros quadrados" },
+          { es:"Pies cuadrados", en:"Square feet", pt:"Pés quadrados" },
+          { es:"Aire acondicionado", en:"Air conditioning", pt:"Ar condicionado" },
+          { es:"Calefacción central", en:"Central heating", pt:"Aquecimento central" },
+          { es:"Calentador de agua", en:"Water heater", pt:"Aquecedor de água" },
+          { es:"Sistema de seguridad", en:"Security system", pt:"Sistema de segurança" },
+          { es:"Cámaras de seguridad", en:"Security cameras", pt:"Câmeras de segurança" },
+          { es:"Portón eléctrico", en:"Electric gate", pt:"Portão elétrico" },
+          { es:"Videoportero / Intercomunicador", en:"Video intercom", pt:"Interfone com vídeo" },
+          { es:"Piso de madera / Parquet", en:"Hardwood flooring", pt:"Piso de madeira" },
+          { es:"Piso de cerámica", en:"Ceramic tile flooring", pt:"Piso de cerâmica" },
+          { es:"Alfombra", en:"Carpet", pt:"Carpete" },
+          { es:"Ventanas de doble cristal", en:"Double-glazed windows", pt:"Janelas duplas" },
+          { es:"Techo alto", en:"High ceiling", pt:"Pé-direito alto" },
+          { es:"Iluminación natural", en:"Natural lighting", pt:"Iluminação natural" },
+          { es:"Chimenea", en:"Fireplace", pt:"Lareira" },
+          { es:"Amueblado", en:"Furnished", pt:"Mobiliado" },
+          { es:"Semi-amueblado", en:"Semi-furnished", pt:"Semi-mobiliado" },
+          { es:"Sin amueblar", en:"Unfurnished", pt:"Sem mobília" },
+          { es:"Sistema HVAC", en:"HVAC system", pt:"Sistema HVAC" },
+          { es:"VRF / Volumen de Refrigerante Variable", en:"VRF system", pt:"Sistema VRF" },
+          { es:"Vidrios Low-E", en:"Low-E glazing", pt:"Vidros Low-E" },
+          { es:"Aislación térmica acústica", en:"Thermoacoustic insulation", pt:"Isolamento termoacústico" },
+          { es:"Estructura sismorresistente", en:"Seismic-resistant structure", pt:"Estrutura sismorresistente" },
+          { es:"Domótica / Smart home", en:"Home automation", pt:"Automação residencial" },
+          { es:"Recuperador de calor", en:"Heat recovery ventilator (HRV)", pt:"Recuperador de calor (HRV)" },
+          { es:"Ventilación mecánica controlada", en:"Mechanical ventilation (MVHR)", pt:"Ventilação mecânica controlada" }
+        ]
+      },
+      bathrooms: {
+        icon: "🚿",
+        title: "Baño / Bathroom / Banheiro",
+        terms: [
+          { es:"Regadera / Ducha", en:"Shower", pt:"Chuveiro" },
+          { es:"Ducha de lluvia", en:"Rain shower", pt:"Chuveiro de chuva" },
+          { es:"Bañera / Tina", en:"Bathtub", pt:"Banheira" },
+          { es:"Jacuzzi / Hidromasaje", en:"Jacuzzi / Hot tub", pt:"Banheira de hidromassagem" },
+          { es:"Lavabo / Lavamanos", en:"Sink / Washbasin", pt:"Pia" },
+          { es:"Inodoro / Retrete", en:"Toilet", pt:"Vaso sanitário" },
+          { es:"Bidé", en:"Bidet", pt:"Bidê" },
+          { es:"Espejo", en:"Mirror", pt:"Espelho" },
+          { es:"Gabinete", en:"Vanity / Cabinet", pt:"Gabinete" },
+          { es:"Grifería", en:"Faucets / Fixtures", pt:"Torneiras" },
+          { es:"Azulejos", en:"Tiles", pt:"Azulejos" },
+          { es:"Ventilación", en:"Ventilation", pt:"Ventilação" },
+          { es:"Extractor de aire", en:"Exhaust fan", pt:"Exaustor" },
+          { es:"Mezcladora termostática", en:"Thermostatic mixer", pt:"Misturador termostático" },
+          { es:"Inodoro rimless", en:"Rimless toilet", pt:"Vaso sanitário sem borda" },
+          { es:"Ducha empotrada", en:"Concealed shower set", pt:"Chuveiro embutido" },
+          { es:"Desagüe lineal", en:"Linear drain", pt:"Ralo linear" }
+        ]
+      },
+      parking: {
+        icon: "🚗",
+        title: "Estacionamiento / Parking / Estacionamento",
+        terms: [
+          { es:"Estacionamiento", en:"Parking space", pt:"Vaga de estacionamento" },
+          { es:"Garaje", en:"Garage", pt:"Garagem" },
+          { es:"Garaje para dos autos", en:"Two-car garage", pt:"Garagem para dois carros" },
+          { es:"Cochera techada", en:"Covered parking", pt:"Estacionamento coberto" },
+          { es:"Estacionamiento descubierto", en:"Uncovered parking", pt:"Estacionamento descoberto" },
+          { es:"Estacionamiento subterráneo", en:"Underground parking", pt:"Estacionamento subterrâneo" },
+          { es:"Estacionamiento para visitas", en:"Visitor parking", pt:"Estacionamento de visitantes" },
+          { es:"Plaza de garaje asignada", en:"Assigned parking spot", pt:"Vaga marcada" },
+          { es:"Entrada para vehículos", en:"Driveway", pt:"Entrada de garagem" },
+          { es:"Cargador para vehículos eléctricos", en:"EV charging station", pt:"Carregador para VE" },
+          { es:"Estacionamiento en tándem", en:"Tandem parking", pt:"Vaga em tandem" },
+          { es:"Sistema de estacionamiento mecánico", en:"Stack parking system", pt:"Sistema de estacionamento mecânico" }
+        ]
+      },
+      property_types: {
+        icon: "🏘️",
+        title: "Tipos de Propiedad / Property Types / Tipos de Imóveis",
+        terms: [
+          { es:"Casa unifamiliar", en:"Single-family home", pt:"Casa térrea" },
+          { es:"Departamento / Apartamento", en:"Apartment / Flat", pt:"Apartamento" },
+          { es:"Condominio", en:"Condominium / Condo", pt:"Condomínio" },
+          { es:"Penthouse / Ático", en:"Penthouse", pt:"Cobertura" },
+          { es:"Dúplex", en:"Duplex", pt:"Duplex" },
+          { es:"Casa adosada", en:"Townhouse", pt:"Casa geminada" },
+          { es:"Estudio / Monoambiente", en:"Studio apartment", pt:"Kitnet / Quitinete" },
+          { es:"Loft", en:"Loft", pt:"Loft" },
+          { es:"Villa / Chalet", en:"Villa", pt:"Casa de luxo" },
+          { es:"Casa de campo", en:"Country house", pt:"Casa de campo" },
+          { es:"Propiedad comercial", en:"Commercial property", pt:"Imóvel comercial" },
+          { es:"Oficina", en:"Office", pt:"Escritório" },
+          { es:"Local comercial", en:"Retail space", pt:"Loja comercial" },
+          { es:"Bodega / Almacén", en:"Warehouse", pt:"Galpão" },
+          { es:"Terreno / Lote", en:"Land / Lot", pt:"Terreno" },
+          { es:"Edificio de apartamentos", en:"Apartment building", pt:"Edifício residencial" },
+          { es:"Multifamiliar", en:"Multifamily", pt:"Multifamiliar" },
+          { es:"Uso mixto", en:"Mixed-use", pt:"Uso misto" },
+          { es:"Co-living", en:"Co-living", pt:"Co-living" },
+          { es:"Build-to-Rent (BTR)", en:"Build-to-Rent", pt:"Build-to-Rent" },
+          { es:"Parque logístico", en:"Logistics park", pt:"Parque logístico" }
+        ]
+      },
+      outdoor: {
+        icon: "🌳",
+        title: "Exteriores / Outdoor / Áreas Externas",
+        terms: [
+          { es:"Jardín", en:"Garden / Yard", pt:"Jardim" },
+          { es:"Jardín frontal", en:"Front yard", pt:"Jardim frontal" },
+          { es:"Jardín trasero / Patio", en:"Backyard", pt:"Quintal" },
+          { es:"Piscina / Alberca", en:"Swimming pool", pt:"Piscina" },
+          { es:"Piscina climatizada", en:"Heated pool", pt:"Piscina aquecida" },
+          { es:"Pérgola", en:"Pergola", pt:"Pérgola" },
+          { es:"Asador / Parrilla", en:"Barbecue / Grill", pt:"Churrasqueira" },
+          { es:"Área de juegos", en:"Playground", pt:"Playground" },
+          { es:"Cancha deportiva", en:"Sports court", pt:"Quadra esportiva" },
+          { es:"Sistema de riego", en:"Irrigation system", pt:"Sistema de irrigação" },
+          { es:"Cerca / Valla", en:"Fence", pt:"Cerca" },
+          { es:"Portón de entrada", en:"Main gate", pt:"Portão principal" },
+          { es:"Camino de acceso", en:"Pathway / Walkway", pt:"Caminho" },
+          { es:"Pavimento permeable", en:"Permeable paving", pt:"Pavimento permeável" },
+          { es:"Bioswale / Zanja de biorretención", en:"Bioswale", pt:"Valeta de biorretenção" },
+          { es:"Jardín en azotea", en:"Rooftop garden", pt:"Jardim na cobertura" }
+        ]
+      },
+      amenities: {
+        icon: "🏊",
+        title: "Amenidades / Amenities / Comodidades",
+        terms: [
+          { es:"Gimnasio", en:"Gym / Fitness center", pt:"Academia" },
+          { es:"Salón de eventos", en:"Event hall", pt:"Salão de festas" },
+          { es:"Sala de cine", en:"Movie theater", pt:"Cinema" },
+          { es:"Sala de juegos", en:"Game room", pt:"Salão de jogos" },
+          { es:"Spa / Sauna", en:"Spa / Sauna", pt:"Spa / Sauna" },
+          { es:"Lobby / Vestíbulo", en:"Lobby", pt:"Lobby" },
+          { es:"Recepción 24 horas", en:"24-hour reception", pt:"Portaria 24 horas" },
+          { es:"Concierge", en:"Concierge", pt:"Concierge" },
+          { es:"Elevador / Ascensor", en:"Elevator", pt:"Elevador" },
+          { es:"Área de coworking", en:"Coworking space", pt:"Espaço de coworking" },
+          { es:"Bodega de almacenamiento", en:"Storage unit", pt:"Box de armazenamento" },
+          { es:"Área para mascotas", en:"Pet area", pt:"Pet place" },
+          { es:"Acceso controlado", en:"Controlled access", pt:"Acesso controlado" },
+          { es:"Casilleros inteligentes", en:"Smart package lockers", pt:"Lockers inteligentes" },
+          { es:"Terraza panorámica", en:"Rooftop deck", pt:"Terraço panorâmico" },
+          { es:"Sala VR / Simulación", en:"VR / Simulation room", pt:"Sala de VR" }
+        ]
+      },
+      legal: {
+        icon: "📋",
+        title: "Términos Legales / Legal Terms / Termos Legais",
+        terms: [
+          { es:"Escritura pública", en:"Deed", pt:"Escritura pública" },
+          { es:"Título de propiedad", en:"Property title", pt:"Título de propriedade" },
+          { es:"Hipoteca", en:"Mortgage", pt:"Hipoteca" },
+          { es:"Embargo preventivo", en:"Lien", pt:"Penhora" },
+          { es:"Servidumbre", en:"Easement", pt:"Servidão" },
+          { es:"Usufructo", en:"Usufruct", pt:"Usufruto" },
+          { es:"Contrato de arrendamiento", en:"Lease agreement", pt:"Contrato de locação" },
+          { es:"Contrato de compraventa", en:"Purchase agreement", pt:"Contrato de compra e venda" },
+          { es:"Cláusula penal", en:"Penalty clause", pt:"Cláusula penal" },
+          { es:"Depósito en garantía", en:"Escrow", pt:"Depósito em garantia" },
+          { es:"Fianza / Depósito", en:"Security deposit", pt:"Caução" },
+          { es:"Aval / Garante", en:"Guarantor", pt:"Fiador" },
+          { es:"Registro de la propiedad", en:"Property registry", pt:"Registro de imóveis" },
+          { es:"Certificado de libertad de gravamen", en:"Title clearance certificate", pt:"Certidão de ônus" },
+          { es:"Notario público", en:"Notary public", pt:"Tabelião" },
+          { es:"Seguro de título", en:"Title insurance", pt:"Seguro de título" },
+          { es:"Derecho de tanteo / preferencia", en:"Right of first refusal (ROFR)", pt:"Direito de preferência" },
+          { es:"Pacto de retroventa", en:"Buyback clause", pt:"Cláusula de recompra" },
+          { es:"Reglamento de copropiedad", en:"Condominium bylaws", pt:"Convenção condominial" },
+          { es:"Debida diligencia", en:"Due diligence", pt:"Due diligence" },
+          { es:"Certificado de zonificación", en:"Zoning certificate", pt:"Certidão de zoneamento" },
+          { es:"Permiso de edificación", en:"Building permit", pt:"Alvará de construção" },
+          { es:"Certificado de recepción final", en:"Occupancy certificate", pt:"Habite-se" },
+          { es:"Levantamiento de gravamen", en:"Lien release", pt:"Baixa de penhora" },
+          { es:"Promesa de compraventa", en:"Purchase option / Earnest agreement", pt:"Promessa de compra e venda" },
+          { es:"Pagaré", en:"Promissory note", pt:"Nota promissória" }
+        ]
+      },
+
+      documentation: {
+        icon: "🧾",
+        title: "Documentación Legal y Escrituración / Legal Documentation / Documentação Legal e Escrituração",
+        terms: [
+            { es: "Promesa de compraventa", en: "Purchase promise agreement", pt: "Contrato de promessa de compra e venda" },
+            { es: "Escritura pública de compraventa", en: "Public deed of sale", pt: "Escritura pública de compra e venda" },
+            { es: "Certificado de dominio vigente", en: "Current ownership certificate", pt: "Certidão de propriedade vigente" },
+            { es: "Certificado de gravámenes y prohibiciones", en: "Encumbrances and liens certificate", pt: "Certidão de ônus e restrições" },
+            { es: "Certificado de avalúo fiscal", en: "Fiscal appraisal certificate", pt: "Certidão de avaliação fiscal" },
+            { es: "Rol de contribuciones", en: "Property tax roll", pt: "Cadastro de IPTU" },
+            { es: "Inscripción en el Conservador de Bienes Raíces", en: "Property registration at the Real Estate Registry", pt: "Registro no Cartório de Imóveis" },
+            { es: "Certificado de hipotecas y gravámenes", en: "Mortgage and lien certificate", pt: "Certidão de hipotecas e gravames" },
+            { es: "Mandato / Poder notarial", en: "Power of attorney", pt: "Procuração pública" },
+            { es: "Boleta de garantía", en: "Bank guarantee letter", pt: "Carta de fiança bancária" },
+            { es: "Informe de tasación bancaria", en: "Bank appraisal report", pt: "Laudo de avaliação bancária" },
+            { es: "Certificado de recepción definitiva", en: "Final building acceptance certificate", pt: "Certificado de aceitação final da obra" },
+            { es: "Certificado de número de propiedad", en: "Official property number certificate", pt: "Certidão de numeração predial" },
+            { es: "Autorización municipal de compraventa", en: "Municipal sale authorization", pt: "Autorização municipal de venda" },
+            { es: "Informe de título", en: "Title report", pt: "Relatório de título" },
+            { es: "Carpeta legal del inmueble", en: "Legal property file", pt: "Dossiê jurídico do imóvel" },
+            { es: "Contrato de corretaje inmobiliario", en: "Real estate brokerage agreement", pt: "Contrato de corretagem imobiliária" },
+            { es: "Declaración jurada de no litigio", en: "Sworn statement of non-litigation", pt: "Declaração juramentada de não litígio" },
+            { es: "Protocolo notarial", en: "Notarial protocol record", pt: "Protocolo notarial" },
+            { es: "Certificado de pre-aprobación hipotecaria", en: "Mortgage pre-approval certificate", pt: "Certificado de pré-aprovação hipotecária" }
+        ]
+      },
+
+      financial: {
+        icon: "💰",
+        title: "Términos Financieros / Financial Terms / Termos Financeiros",
+        terms: [
+          { es:"Precio de venta", en:"Sale price", pt:"Preço de venda" },
+          { es:"Precio de lista", en:"Listing price", pt:"Preço de tabela" },
+          { es:"Avalúo / Tasación", en:"Appraisal", pt:"Avaliação" },
+          { es:"Enganche / Cuota inicial", en:"Down payment", pt:"Entrada" },
+          { es:"Mensualidad", en:"Monthly payment", pt:"Parcela mensal" },
+          { es:"Amortización", en:"Amortization", pt:"Amortização" },
+          { es:"Tasa de interés", en:"Interest rate", pt:"Taxa de juros" },
+          { es:"Tasa fija", en:"Fixed rate", pt:"Taxa fixa" },
+          { es:"Tasa variable", en:"Variable rate", pt:"Taxa variável" },
+          { es:"Plusvalía", en:"Capital gains", pt:"Mais-valia" },
+          { es:"Valorización", en:"Appreciation", pt:"Valorização" },
+          { es:"Depreciación", en:"Depreciação", pt:"Depreciación" },
+          { es:"Impuesto predial", en:"Property tax", pt:"IPTU" },
+          { es: "Gastos comunes", en: "Condominium fee / Common expenses", pt: "Despesas comuns" },
+          { es:"Cuota de mantenimiento", en:"HOA fee / Maintenance fee", pt:"Taxa de condomínio" },
+          { es:"Comisión del agente", en:"Agent commission", pt:"Comissão do corretor" },
+          { es:"Gastos de cierre", en:"Closing costs", pt:"Custos de fechamento" },
+          { es:"Pre-aprobación", en:"Pre-approval", pt:"Pré-aprovação" },
+          { es:"Anticipo / Adelanto", en:"Advance payment", pt:"Adiantamento" },
+          { es:"Tasa de capitalización", en:"Cap rate", pt:"Cap rate" },
+          { es:"Ingreso operativo neto", en:"NOI", pt:"NOI" },
+          { es:"Relación préstamo-valor", en:"LTV (Loan-to-Value)", pt:"LTV" },
+          { es:"Índice de cobertura de deuda", en:"DSCR", pt:"DSCR" },
+          { es:"Tasa interna de retorno", en:"IRR", pt:"TIR / IRR" },
+          { es:"Valor presente neto", en:"NPV", pt:"VPL / NPV" },
+          { es:"Pago global", en:"Balloon payment", pt:"Parcela balão" },
+          { es:"Penalidad por prepago", en:"Prepayment penalty", pt:"Multa por pré-pagamento" },
+          { es:"Hipoteca a tasa ajustable", en:"ARM (Adjustable-Rate Mortgage)", pt:"Hipoteca de taxa ajustável" },
+          { es:"Puntos hipotecarios", en:"Mortgage points", pt:"Pontos hipotecários" },
+          { es:"Préstamo puente", en:"Bridge loan", pt:"Empréstimo ponte" }
+        ]
+      },
+      condition: {
+        icon: "🔧",
+        title: "Estado / Condition / Estado",
+        terms: [
+          { es:"Obra nueva / A estrenar", en:"Brand new / New construction", pt:"Na planta / Novo" },
+          { es:"En construcción", en:"Under construction", pt:"Em construção" },
+          { es:"Pre-venta", en:"Pre-sale", pt:"Pré-lançamento" },
+          { es:"Listo para habitar", en:"Move-in ready", pt:"Pronto para morar" },
+          { es:"Excelente estado", en:"Excellent condition", pt:"Excelente estado" },
+          { es:"Buen estado", en:"Good condition", pt:"Bom estado" },
+          { es:"Para remodelar", en:"Fixer-upper", pt:"A reformar" },
+          { es:"Remodelado recientemente", en:"Recently renovated", pt:"Recém-reformado" },
+          { es:"Como nuevo", en:"Like new", pt:"Seminovo" },
+          { es:"Mantenimiento necesario", en:"Needs maintenance", pt:"Precisa manutenção" },
+          { es:"Cáscara y núcleo", en:"Shell & core", pt:"Shell & core" },
+          { es:"White box / listo para habilitar", en:"White box", pt:"White box" },
+          { es:"Lista de pendientes", en:"Punch list / Snagging", pt:"Lista de pendências" },
+          { es:"Entrega en estado 'as-is'", en:"As-is delivery", pt:"Entrega as-is" },
+          { es:"Habilitación interior", en:"Fit-out", pt:"Fit-out" }
+        ]
+      },
+      location: {
+        icon: "📍",
+        title: "Ubicación / Location / Localização",
+        terms: [
+          { es:"Céntrico", en:"Downtown / Central", pt:"Centro" },
+          { es:"Zona residencial", en:"Residential area", pt:"Área residencial" },
+          { es:"Zona comercial", en:"Commercial area", pt:"Área comercial" },
+          { es:"Frente al mar", en:"Beachfront", pt:"De frente para o mar" },
+          { es:"Vista al mar", en:"Ocean view", pt:"Vista para o mar" },
+          { es:"Cerca de transporte público", en:"Near public transportation", pt:"Próximo ao transporte público" },
+          { es:"Cerca de escuelas", en:"Near schools", pt:"Próximo a escolas" },
+          { es:"Cerca de centros comerciales", en:"Near shopping centers", pt:"Próximo a shoppings" },
+          { es:"Zona tranquila", en:"Quiet area", pt:"Área tranquila" },
+          { es:"Zona segura", en:"Safe neighborhood", pt:"Bairro seguro" },
+          { es:"Vecindario exclusivo", en:"Exclusive neighborhood", pt:"Bairro nobre" },
+          { es:"Planta baja", en:"Ground floor", pt:"Térreo" },
+          { es:"Piso alto", en:"High floor", pt:"Andar alto" },
+          { es:"Último piso", en:"Top floor", pt:"Último andar" },
+          { es:"Desarrollo orientado al transporte", en:"Transit-Oriented Development (TOD)", pt:"Desenvolvimento orientado ao transporte" },
+          { es:"Cul-de-sac", en:"Cul-de-sac", pt:"Cul-de-sac" },
+          { es:"Unidad esquina", en:"Corner unit", pt:"Unidade de esquina" },
+          { es:"Zona de inundación", en:"Flood zone", pt:"Zona de inundação" },
+          { es:"Puntaje de caminabilidad", en:"Walkability score", pt:"Índice de caminhabilidade" }
+        ]
+      }
+    };
+
+    // === TTS ===
+    function speakText(text, lang) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang; u.rate = 0.9;
+      const v = speechSynthesis.getVoices().find(x=>x.lang.toLowerCase().startsWith(lang.split('-')[0].toLowerCase()));
+      if(v) u.voice = v;
+      try{ speechSynthesis.cancel(); }catch(e){}
+      speechSynthesis.speak(u);
+      return u;
+    }
+    function handleSpeak(btn,text,lang){
+      btn.classList.add('playing');
+      const u=speakText(text,lang);
+      u.onend=()=>btn.classList.remove('playing');
+      u.onerror=()=>btn.classList.remove('playing');
+    }
+
+    // === Render ===
+    function createVocabItem(term){
+      const item=document.createElement('div');
+      item.className='vocab-item';
+      item.dataset.search=`${term.es} ${term.en} ${term.pt}`.toLowerCase();
+      const safe=s=>String(s).replace(/'/g,"\\'");
+      item.innerHTML=`
+        <div class="translations">
+          <div class="translation-row">
+            <span class="lang-label">🇪🇸 ES</span>
+            <span class="translation-text">${term.es}</span>
+            <button class="speak-btn" onclick="handleSpeak(this,'${safe(term.es)}','es-ES')">🔊</button>
+          </div>
+          <div class="translation-row">
+            <span class="lang-label">🇬🇧 EN</span>
+            <span class="translation-text">${term.en}</span>
+            <button class="speak-btn" onclick="handleSpeak(this,'${safe(term.en)}','en-US')">🔊</button>
+          </div>
+          <div class="translation-row">
+            <span class="lang-label">🇧🇷 PT</span>
+            <span class="translation-text">${term.pt}</span>
+            <button class="speak-btn" onclick="handleSpeak(this,'${safe(term.pt)}','pt-BR')">🔊</button>
+          </div>
+        </div>`;
+      return item;
+    }
+
+    function renderCategories(){
+      const container=document.getElementById('categoriesContainer');
+      container.innerHTML='';
+      for(const [key,category] of Object.entries(vocabulary)){
+        const card=document.createElement('div');
+        card.className='category-card';
+        card.dataset.category=key;
+
+        const title=document.createElement('h2');
+        title.className='category-title';
+        title.innerHTML=`<span class="icon">${category.icon}</span>
+                         <span class="text title-gradient">${category.title}</span>`;
+        card.appendChild(title);
+
+        category.terms.forEach(t=>card.appendChild(createVocabItem(t)));
+        container.appendChild(card);
+      }
+    }
+
+    function renderFilters(){
+      const container=document.getElementById('filterContainer');
+      container.innerHTML='';
+      const allBtn=document.createElement('button');
+      allBtn.className='filter-btn active';
+      allBtn.textContent='🌐 Todas';
+      allBtn.onclick=()=>filterCategory('all');
+      container.appendChild(allBtn);
+
+      for(const [key,category] of Object.entries(vocabulary)){
+        const btn=document.createElement('button');
+        btn.className='filter-btn';
+        btn.title=category.title;
+        btn.textContent=category.icon;
+        btn.onclick=()=>filterCategory(key);
+        container.appendChild(btn);
+      }
+    }
+
+    function filterCategory(category){
+      document.querySelectorAll('.filter-btn').forEach((btn,i)=>{
+        btn.classList.toggle('active',(category==='all'&&i===0)||btn.title===vocabulary[category]?.title);
+      });
+      document.querySelectorAll('.category-card').forEach(card=>{
+        card.style.display=(category==='all'||card.dataset.category===category)?'block':'none';
+      });
+      document.getElementById('categoriesContainer').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function updateStats(){
+      let total=0; for(const c of Object.values(vocabulary)) total+=c.terms.length;
+      document.getElementById('statsDisplay').textContent=`📚 ${total} términos técnicos | ${Object.keys(vocabulary).length} categorías`;
+    }
+
+    function setupSearch(){
+      const input=document.getElementById('searchInput');
+      input.addEventListener('input',e=>{
+        const q=e.target.value.toLowerCase().trim();
+        const cards=document.querySelectorAll('.category-card');
+        if(!q){
+          document.querySelectorAll('.vocab-item').forEach(it=>it.style.display='block');
+          cards.forEach(c=>c.style.display='block'); return;
+        }
+        cards.forEach(card=>{
+          let any=false;
+          card.querySelectorAll('.vocab-item').forEach(it=>{
+            const ok=it.dataset.search.includes(q);
+            it.style.display=ok?'block':'none';
+            if(ok) any=true;
+          });
+          card.style.display=any?'block':'none';
+        });
+      });
+      input.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+          const first=document.querySelector('.vocab-item[style*="display: block"], .vocab-item:not([style])');
+          if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+      });
+    }
+
+    speechSynthesis.onvoiceschanged=()=>{ try{ speechSynthesis.getVoices(); }catch(e){} };
+
+    renderCategories();
+    renderFilters();
+    updateStats();
+    setupSearch();
+  </script>
+</body>
+</html>
